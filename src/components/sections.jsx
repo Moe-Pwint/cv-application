@@ -3,6 +3,17 @@ import '../styles/sections.css';
 
 
 export default function Sections() {
+    return (
+        <>
+            <h2 className='titles'>General Information</h2>
+            <GISection />
+            <h2 className='titles'>Educational Experience</h2>
+            <h2 className='titles'>Practical Experience</h2>
+        </>
+    )
+}
+
+function GISection() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [generalInfoStat, setGeneralInfoStat] = useState('filling');
@@ -19,37 +30,22 @@ export default function Sections() {
     }
     if (generalInfoStat === 'filling') {
     return (
-        <>
-            <h2 className='titles'>General Information</h2>
-                
-                    <GIForm 
-                    firstName={firstName}
-                    cFN={changeFirstName}
-                    lastName={lastName}
-                    cLN={changeLastName}
-                    generalInfoStat={formSubmitted}
-                    />
-                 
-            <h2 className='titles'>Educational Experience</h2>
-            <h2 className='titles'>Practical Experience</h2>
-        </>
+            <GIForm 
+            firstName={firstName}
+            cFN={changeFirstName}
+            lastName={lastName}
+            cLN={changeLastName}
+            generalInfoStat={formSubmitted}
+            />
     )} else if (generalInfoStat === 'submitted') {
         return (
-            <>
-            <h2 className='titles'>General Information</h2>
-
-            <DisplayGI 
+            <GIDisplay 
             fN={firstName}
             lN={lastName}
             />
-            <h2 className='titles'>Educational Experience</h2>
-            <h2 className='titles'>Practical Experience</h2>
-        
-        </>
         )
     }
 }
-
 
 function GIForm({firstName, cFN, lastName, cLN, generalInfoStat}) {
 
@@ -80,7 +76,7 @@ function GIForm({firstName, cFN, lastName, cLN, generalInfoStat}) {
     )
 }
 
-function DisplayGI({fN, lN}){
+function GIDisplay({fN, lN}){
     return (
         <>
         <p>Full Name: {fN + " " + lN}</p>
