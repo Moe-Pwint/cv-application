@@ -9,7 +9,42 @@ export default function Sections() {
             <GISection />
             <h2 className='titles'>Educational Experience</h2>
             <EduSection />
+            <h2 className='titles'>Text Sections</h2>
+            <TextSections />
             <h2 className='titles'>Practical Experience</h2>
+        </>
+    )
+}
+
+function TextSections() {
+    const [textSection, setTextSection] = useState([{id: crypto.randomUUID(), text:''}]);
+
+    function addTextSection () {
+        setTextSection([...textSection, {id: crypto.randomUUID(), text:''}])
+    }
+
+    function updateText (sectionId, e) {
+               
+        setTextSection(textSection.map((obj) => {
+            if (obj.id === sectionId) {
+               return {...obj, text: e.target.value}
+            }
+            return obj;
+        }))
+    }
+
+        return (
+            <>
+            {textSection.map(section => (
+            <form key={section.id}>
+                <label htmlFor="text">Text: </label>
+                <input onChange={ (e) => {
+                    updateText(section.id, e)
+                }} type="text" />
+                <button type='submit'>Submit</button>
+            </form>
+        ))}
+            <button onClick={addTextSection}>Add Text</button>
         </>
     )
 }
@@ -17,6 +52,7 @@ export default function Sections() {
 
 function GISection() {
     const [GeneralInfo, setGeneralInfo] = useState({
+        id: crypto.randomUUID(),
         firstName: '',
         lastName: '',
         email: '',
@@ -55,7 +91,7 @@ function GISection() {
 
     if (generalInfoStat === 'filling') {
     return (
-            <GIForm 
+            <GIForm key={GeneralInfo.id}
             GeneralInfo={GeneralInfo}
             changeFirstName={changeFirstName}
             changeLastName={changeLastName}
@@ -150,6 +186,7 @@ function GIDisplay({GeneralInfo, formEdit}){
 
 function EduSection() {
     const [eduInfo, setEduInfo] = useState({
+        id: crypto.randomUUID(),
         institute: '',
         studyName: '',
         dateStart: '',
@@ -188,7 +225,7 @@ function EduSection() {
 
     if (eduInfoStat === 'filling') {
     return (
-            <EduForm 
+            <EduForm key={eduInfo.id}
             eduInfo={eduInfo}
             changeInstitute={changeInstitute}
             changeStudyName={changeStudyName}
@@ -283,3 +320,4 @@ function EduDisplay({eduInfo, formEdit}){
         </div>
     )
 }
+
