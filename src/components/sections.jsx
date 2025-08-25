@@ -8,7 +8,7 @@ export default function Sections() {
             <h2 className='titles'>General Information</h2>
             <GISection />
             <h2 className='titles'>Educational Experience</h2>
-            <EduSection />
+            <Edu />
             <h2 className='titles'>Text Sections</h2>
             <TextSections />
             <h2 className='titles'>Practical Experience</h2>
@@ -35,8 +35,22 @@ function TextSections() {
 
         return (
             <>
+            <TextForm textSection={textSection}
+            updateText={updateText}/>
+
+            <button onClick={addTextSection}>Add Text</button>
+            </>
+    )
+}
+
+function TextForm({textSection, updateText}) {
+    
+    return (
+        <>
             {textSection.map(section => (
-            <form key={section.id}>
+            <form key={section.id}
+            onSubmit={(e)=> e.preventDefault()}
+            >
                 <label htmlFor="text">Text: </label>
                 <input onChange={ (e) => {
                     updateText(section.id, e)
@@ -44,11 +58,18 @@ function TextSections() {
                 <button type='submit'>Submit</button>
             </form>
         ))}
-            <button onClick={addTextSection}>Add Text</button>
         </>
     )
 }
 
+function TextDisplay ({textDisplay}) {
+    return (
+        <div className='displayDiv'>
+                <span className='displayField'>Text: </span>
+                <span className='displayInfo'>{textDisplay}</span>
+            </div>
+    )
+}
 
 function GISection() {
     const [GeneralInfo, setGeneralInfo] = useState({
@@ -183,8 +204,20 @@ function GIDisplay({GeneralInfo, formEdit}){
     )
 }
 
-
 function EduSection() {
+    const [eduInfo, setEduInfo] = useState([{
+        id: crypto.randomUUID(),
+        institute: '',
+        studyName: '',
+        dateStart: '',
+        dateEnd: '',
+    }]);
+
+
+
+}
+
+function Edu() {
     const [eduInfo, setEduInfo] = useState({
         id: crypto.randomUUID(),
         institute: '',
