@@ -20,7 +20,7 @@ function TextSections() {
     const [textSection, setTextSection] = useState([{id: crypto.randomUUID(), text:''}]);
 
     function addTextSection () {
-        setTextSection([...textSection, {id: crypto.randomUUID(), text:''}])
+        setTextSection(prev => [...prev, {id: crypto.randomUUID(), text:''}])
     }
 
     function updateText (sectionId, e) {
@@ -33,41 +33,72 @@ function TextSections() {
         }))
     }
 
-        return (
-            <>
-            <TextForm textSection={textSection}
-            updateText={updateText}/>
-
-            <button onClick={addTextSection}>Add Text</button>
-            </>
-    )
-}
-
-function TextForm({textSection, updateText}) {
-    
     return (
         <>
-            {textSection.map(section => (
-            <form key={section.id}
-            onSubmit={(e)=> e.preventDefault()}
-            >
-                <label htmlFor="text">Text: </label>
-                <input onChange={ (e) => {
-                    updateText(section.id, e)
-                }} type="text" />
-                <button type='submit'>Submit</button>
-            </form>
+        {textSection.map(section => (
+            <IndieTextForm key={section.id} section={section}
+            updateText={updateText}
+            />
         ))}
+        <button onClick={addTextSection}>Add Text</button>
         </>
     )
 }
 
-function TextDisplay ({textDisplay}) {
+
+function IndieTextForm({section, updateText}) {
+
+    const [formStatus, setFormStatus] = useState('filling');
+
+    function fillingForm() {
+        setFormStatus('filling');
+    }
+
+    function submitForm() {
+        setFormStatus('submitted');
+    }
+
+    if (formStatus === 'filling') {
+        return (
+            <> 
+                <form
+                    onSubmit={(e)=> {
+                        e.preventDefault()
+                        submitForm()
+                    }}
+                >
+                    <label htmlFor="text">Text: </label>
+                    <input value={section.text}
+                    onChange={ (e) => {
+                        updateText(section.id, e)
+                    }} type="text" />
+                    <button type='submit'>Submit</button>
+                </form>
+            </>
+        )
+    }
+
+    if (formStatus === 'submitted') {
+        return (
+            <>
+                <TextDisplay textDisplay={section.text}
+                formStatus={fillingForm} />
+            </>
+        )
+    }
+}
+
+function TextDisplay ({textDisplay, formStatus}) {
     return (
-        <div className='displayDiv'>
-                <span className='displayField'>Text: </span>
-                <span className='displayInfo'>{textDisplay}</span>
+        <div className="display">
+            <div className='displayDiv'>
+                    <span className='displayField'>Text: </span>
+                    <span className='displayInfo'>{textDisplay}</span>
             </div>
+            <button className='editBtn'
+            onClick={formStatus}
+             >Edit</button>
+        </div>
     )
 }
 
