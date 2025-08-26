@@ -1,8 +1,11 @@
-#root {
+#body,h1 {
   margin: 0;
-  padding: 2rem;
+  padding: 0;
 }
 
-.titles {
+#title {
+  font-size: 4em;
   text-align: center;
+  background-color: rgb(230, 199, 96);
+  padding: 1.5em;
 }

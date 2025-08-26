@@ -8,97 +8,9 @@ export default function Sections() {
             <h2 className='titles'>General Information</h2>
             <GISection />
             <h2 className='titles'>Educational Experience</h2>
-            <Edu />
-            <h2 className='titles'>Text Sections</h2>
-            <TextSections />
+            <EduSection />
             <h2 className='titles'>Practical Experience</h2>
         </>
-    )
-}
-
-function TextSections() {
-    const [textSection, setTextSection] = useState([{id: crypto.randomUUID(), text:''}]);
-
-    function addTextSection () {
-        setTextSection(prev => [...prev, {id: crypto.randomUUID(), text:''}])
-    }
-
-    function updateText (sectionId, e) {
-               
-        setTextSection(textSection.map((obj) => {
-            if (obj.id === sectionId) {
-               return {...obj, text: e.target.value}
-            }
-            return obj;
-        }))
-    }
-
-    return (
-        <>
-        {textSection.map(section => (
-            <IndieTextForm key={section.id} section={section}
-            updateText={updateText}
-            />
-        ))}
-        <button onClick={addTextSection}>Add Text</button>
-        </>
-    )
-}
-
-
-function IndieTextForm({section, updateText}) {
-
-    const [formStatus, setFormStatus] = useState('filling');
-
-    function fillingForm() {
-        setFormStatus('filling');
-    }
-
-    function submitForm() {
-        setFormStatus('submitted');
-    }
-
-    if (formStatus === 'filling') {
-        return (
-            <> 
-                <form
-                    onSubmit={(e)=> {
-                        e.preventDefault()
-                        submitForm()
-                    }}
-                >
-                    <label htmlFor="text">Text: </label>
-                    <input value={section.text}
-                    onChange={ (e) => {
-                        updateText(section.id, e)
-                    }} type="text" />
-                    <button type='submit'>Submit</button>
-                </form>
-            </>
-        )
-    }
-
-    if (formStatus === 'submitted') {
-        return (
-            <>
-                <TextDisplay textDisplay={section.text}
-                formStatus={fillingForm} />
-            </>
-        )
-    }
-}
-
-function TextDisplay ({textDisplay, formStatus}) {
-    return (
-        <div className="display">
-            <div className='displayDiv'>
-                    <span className='displayField'>Text: </span>
-                    <span className='displayInfo'>{textDisplay}</span>
-            </div>
-            <button className='editBtn'
-            onClick={formStatus}
-             >Edit</button>
-        </div>
     )
 }
 
@@ -241,147 +153,180 @@ function EduSection() {
         institute: '',
         studyName: '',
         dateStart: '',
-        dateEnd: '',
+        dateEnd: ''
     }]);
 
+    function addEduSection() {
+        setEduInfo(prev => [...prev,
+            {id: crypto.randomUUID(),
+            institute: '',
+            studyName: '',
+            dateStart: '',
+            dateEnd: ''}])
+    }
 
+    function updateInstitute (sectionId, e) {
+               
+        setEduInfo(eduInfo.map((obj) => {
+            if (obj.id === sectionId) {
+               return {...obj, institute: e.target.value}
+            }
+            return obj;
+        }))
+    }
 
+    function updateStudyName (sectionId, e) {
+               
+        setEduInfo(eduInfo.map((obj) => {
+            if (obj.id === sectionId) {
+               return {...obj, studyName: e.target.value}
+            }
+            return obj;
+        }))
+    }
+
+    function updateDateStart (sectionId, e) {
+               
+        setEduInfo(eduInfo.map((obj) => {
+            if (obj.id === sectionId) {
+               return {...obj, dateStart: e.target.value}
+            }
+            return obj;
+        }))
+    }
+
+    function updateDateEnd (sectionId, e) {
+               
+        setEduInfo(eduInfo.map((obj) => {
+            if (obj.id === sectionId) {
+               return {...obj, dateEnd: e.target.value}
+            }
+            return obj;
+        }))
+    }
+
+    function removeObj (sectionId) {
+        setEduInfo(eduInfo.filter((obj) => {
+            if (obj.id !== sectionId) {
+                return obj;
+            }
+        }))
+    }
+
+    return (
+        <>
+            <button id='addEduBtn' onClick={addEduSection}>Add Education</button>
+            {eduInfo.map( obj => (
+                <IndieEduSection key={obj.id}
+                obj={obj}
+                updateInstitute={updateInstitute}
+                updateStudyName={updateStudyName}
+                updateDateStart={updateDateStart}
+                updateDateEnd={updateDateEnd}
+                removeObj={removeObj}
+                />
+                )
+            )}
+        </>
+    )
 }
 
-function Edu() {
-    const [eduInfo, setEduInfo] = useState({
-        id: crypto.randomUUID(),
-        institute: '',
-        studyName: '',
-        dateStart: '',
-        dateEnd: '',
-    });
-    const [eduInfoStat, setEduInfoStat] = useState('filling');
+function IndieEduSection ({obj, updateInstitute, updateStudyName, updateDateStart, updateDateEnd, removeObj}) {
+    const [formStatus, setFormStatus] = useState('filling');
 
-    const changeInstitute = (e) => {
-        setEduInfo({...eduInfo, 
-            institute: e.target.value})
-    }
-    const changeStudyName = (e) => {
-        setEduInfo({...eduInfo, 
-            studyName: e.target.value})
+    function submitForm() {
+        setFormStatus('submitted');
     }
 
-    const changeDateStart = (e) => {
-        setEduInfo({...eduInfo,
-            dateStart: e.target.value
-        })
+    function fillForm() {
+        setFormStatus('filling');
     }
 
-    const changeDateEnd = (e) => {
-        setEduInfo({...eduInfo,
-            dateEnd: e.target.value
-        })
-    }
-
-    const formSubmitted = () => {
-        setEduInfoStat('submitted');
-    }
-
-    const formEdit = () => {
-        setEduInfoStat('filling');
-    }
-
-    if (eduInfoStat === 'filling') {
-    return (
-            <EduForm key={eduInfo.id}
-            eduInfo={eduInfo}
-            changeInstitute={changeInstitute}
-            changeStudyName={changeStudyName}
-            changeDateStart={changeDateStart}
-            changeDateEnd={changeDateEnd}
-            formSubmit={formSubmitted}
+    if (formStatus === 'filling') {
+        return (
+            < EduForm
+            obj={obj}
+            updateInstitute={updateInstitute}
+            updateStudyName={updateStudyName}
+            updateDateStart={updateDateStart}
+            updateDateEnd={updateDateEnd}
+            submitForm={submitForm}
+            removeObj={removeObj}
             />
-    )} else if (eduInfoStat === 'submitted') {
+        )
+    }
+
+    if (formStatus === 'submitted') {
         return (
             <EduDisplay 
-            eduInfo={eduInfo}
-            formEdit={formEdit}
+            obj={obj}
+            fillForm={fillForm}
+            removeObj={removeObj}
             />
         )
     }
 }
 
-function EduForm({eduInfo, changeInstitute, changeStudyName, changeDateStart, changeDateEnd, formSubmit}) {
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        formSubmit();
-    }
-
+function EduForm ({obj, updateInstitute, updateStudyName, updateDateStart, updateDateEnd, submitForm, removeObj}) {
     return (
-        <form action="" onSubmit={handleSubmit}>
-            <div className='infoDiv'>
-                <label htmlFor="institute">Institute Name: </label>
-                <input
-                required
-                type="text"
-                id='institute'
-                value={eduInfo.institute}
-                onChange={changeInstitute} />
+        <form onSubmit={e => {
+            e.preventDefault();
+            submitForm();
+        }}>
+            <div className="infoDiv">
+                <label htmlFor="institute">Name of the Institute: </label>
+                <input type="text" name="institute" value={obj.institute} 
+                onChange={(e) => {
+                    updateInstitute(obj.id,e)
+                }} />
             </div>
-
-            <div className='infoDiv'>
-                <label htmlFor='study'>Study Name: </label>
-                <input
-                required
-                type="text"
-                id='study'
-                value={eduInfo.studyName}
-                onChange={changeStudyName} />
+            <div className="infoDiv">
+                <label htmlFor="studyName">Name of the Study: </label>
+                <input type="text" name="studyName" value={obj.studyName} onChange={(e) => {
+                    updateStudyName(obj.id,e)
+                }} />
             </div>
-
-            <div className='infoDiv'>
+            <div className="infoDiv">
                 <label htmlFor="dateStart">Date Started: </label>
-                <input
-                type="text"
-                id='dateStart'
-                value={eduInfo.dateStart}
-                onChange={changeDateStart}
-                 />
+                <input type="text" name="dateStart" value={obj.dateStart} onChange={(e) => {
+                    updateDateStart(obj.id,e)
+                }}  />
             </div>
-
-            <div className='infoDiv'>
+            <div className="infoDiv">
                 <label htmlFor="dateEnd">Date Ended: </label>
-                <input
-                type='text'
-                id='dateEnd'
-                value={eduInfo.dateEnd}
-                onChange={changeDateEnd}
-                 />
+                <input type="text" name="dateEnd" value={obj.dateEnd} onChange={(e) => {
+                    updateDateEnd(obj.id,e)
+                }}  />
             </div>
-
             <button className='submitBtn' type='submit'>Submit</button>
+            <button onClick={() => removeObj(obj.id)} className='removeBtn'>Remove</button>
         </form>
     )
 }
 
-function EduDisplay({eduInfo, formEdit}){
+function EduDisplay({obj, fillForm, removeObj}) {
     return (
-        <div className='display'>
-            <div className='displayDiv - light'>
-                <span className='displayField'>Institute Name: </span>
-                <span className='displayInfo'>{eduInfo.institute}</span>
+        <div className="display">
+            <div className="displayDiv light">
+                <span className="displayField">Name of the Institute: </span>
+                <span className="displayInfo">{obj.institute}</span>
             </div>
-            <div className='displayDiv'>
-                <span className='displayField'>Study Name: </span>
-                <span className='displayInfo'>{eduInfo.studyName}</span>
+            <div className="displayDiv">
+                <span className="displayField">Name of the Study: </span>
+                <span className="displayInfo">{obj.studyName}</span>
             </div>
-            <div className='displayDiv - light'>
-                <span className='displayField'>Date Started: </span>
-                <span className='displayInfo'>{eduInfo.dateStart}</span>
+            <div className="displayDiv light">
+                <span className="displayField">Date Started: </span>
+                <span className="displayInfo">{obj.dateStart}</span>
             </div>
-            <div className='displayDiv'>
-                <span className='displayField'>Date Ended: </span>
-                <span className='displayInfo'>{eduInfo.dateEnd}</span>
+            <div className="displayDiv">
+                <span className="displayField">Date Ended: </span>
+                <span className="displayInfo">{obj.dateEnd}</span>
             </div>
-            <button className='editBtn' onClick={formEdit}>Edit</button>
+            <button className='editBtn' onClick={fillForm}>Edit</button>
+            <button onClick={() => removeObj(obj.id)} className='removeBtn'>Remove</button>
         </div>
     )
 }
+
 

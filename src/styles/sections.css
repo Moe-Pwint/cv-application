@@ -5,12 +5,29 @@ body {
     background-color: azure;
 }
 
+.titles {
+    margin-top: 3em;
+    font-size: 2.5em;
+    text-align: center;
+}
+
+#addEduBtn {
+    display: block;
+    margin: auto;
+    margin-bottom: 1em;
+    background-color:  rgb(78, 74, 172);
+    color: white;
+    font-size: 1.3em;
+}
+
+
 form {
     font-size: 1.3em;
     margin: auto;
     width: max(500px, 50vw);
     background-color: rgb(179, 219, 251);
     padding: 2em;
+    margin-bottom: 1em;
 }
 
 .submitBtn {
@@ -34,6 +51,7 @@ input {
     font-size: 1.3em;
     font-weight:bold;
     margin: auto;
+    margin-bottom: 1em;
     width: max(500px, 50vw);
     border: 2px solid rgb(150, 192, 235);
     background-color: rgb(179, 219, 251);
@@ -69,10 +87,15 @@ input {
 
 .editBtn {
     min-width: 120px;
-    height: 40px;
-    padding: 0.2em;
+
     background-color: rgb(78, 74, 172);
     color: white;
     margin-top: 1.5em;
     margin-left: 2em;
+}
+
+.removeBtn {
+    margin-left: 1em;
+    color: white;
+    background-color: rgb(196, 68, 51);
 }
