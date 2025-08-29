@@ -8,6 +8,7 @@ function App() {
     <>
       <h1 id='title'>CV Application</h1>
       <Sections/>
+      <footer></footer>
     </>
   )
 }
